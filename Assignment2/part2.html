@@ -1,0 +1,108 @@
+<!doctype html>
+<!-- 
+HOLLY BRICE 
+CIS 399: Web Engineering
+HOMEWORK 2; Part 2.
+-->
+
+<html>
+	<head>
+		<style>
+
+
+		</style>
+
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+		<script type="text/javascript">
+		
+		/* Checks to see if number passed in is prime */
+		function isPrime(number){
+			if(number == 0){
+				return false; //not prime
+			} else if(number == 1){ //prime
+				return true;
+			} else{ // for every other case
+				for(var i = 2; i*i <=number; i++){
+					if(number %i == 0) return i;
+				}
+				return true;
+			}
+		};
+
+
+		var main = function() {
+
+			/* when button is clicked, do this */
+			$("button.submit").on("click", function(event) {
+
+				var selector = $(".selector").val(); //input text
+				console.log(selector);
+				var result = isPrime(selector); //call function
+
+				if(result == true){
+					$(".result h2 .sc").empty();
+					$(".result h2 .sc").append(selector + " is prime.");
+				} else if(result == 0){
+					$(".result h2 .sc").empty();
+					$(".result h2 .sc").append(selector + " is not Prime!");
+				} else { //result is a number
+					$(".result h2 .sc").empty();
+					$(".result h2 .sc").append(selector + " is not Prime, it is divisible by " + result + "!");
+				}
+			
+				$(".selector").val(""); // clear box after
+
+			});
+
+
+			/* for enter */
+			$(".selector").on("keypress", function(event) {
+				if(event.keyCode == 13) {
+					var selector = $(".selector").val(); //input text
+				console.log(selector);
+				var result = isPrime(selector); //call function
+
+				if(result == true){
+					$(".result h2 .sc").empty();
+					$(".result h2 .sc").append(selector + " is prime.");
+				} else if(result == 0){
+					$(".result h2 .sc").empty();
+					$(".result h2 .sc").append(selector + " is not Prime!");
+				} else { //result is a number
+					$(".result h2 .sc").empty();
+					$(".result h2 .sc").append(selector + " is not Prime, it is divisible by " + result + "!");
+				}
+			
+				$(".selector").val(""); // clear box after
+
+				}
+			});
+
+		}
+
+        $(document).ready(main);
+		</script>
+
+	</head>
+		
+	<body>
+		<h1>Let me check that for you</h1>
+
+		<section class="selector-input">
+				<h3 style="color:red;">Type in a number and I'll check if it is prime: <input class="selector" type="text">
+        		<button class="submit">Submit</button>
+        	</h3>
+				
+		</section>
+
+		<section class="result">
+
+			 <h2>What I found: Looks like <span class="sc"></span></h2>
+
+		</section>	
+
+	</body>
+
+
+</html>		

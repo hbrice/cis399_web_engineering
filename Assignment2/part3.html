@@ -1,0 +1,84 @@
+<!doctype html>
+<!-- 
+HOLLY BRICE 
+CIS 399: Web Engineering
+HOMEWORK 2; part 3.
+-->
+
+<html>
+	<head>
+		<style>
+
+		</style>
+
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+		<script type="text/javascript">
+
+		var map = {}; //create empty hash map
+		console.log(map);
+		
+		var main = function() {
+			console.log("working");
+
+			/* when button is clicked, do this */
+			$("button.submit").on("click", function(event) {
+				console.log("Button has clicked"); //for testing
+				var selector = $(".selector").val();
+								
+				/* checks to see if dog name is in the map */
+				if(selector in map){
+					map[selector]++;
+				} else{
+					map[selector] = 1;
+				}
+				console.log(map);
+				 // printing the string
+				$(".result h2 .sc").text(selector + " now has " + map[selector] + " votes!");
+				$(".selector").val(""); // clear box after
+
+			});
+
+			/* for enter */
+			$(".selector").on("keypress", function(event) {
+				if(event.keyCode == 13) {
+					var selector = $(".selector").val();
+				
+					/* checks to see if dog name is in the map */
+					if(selector in map){
+						map[selector]++;
+					} else{
+						map[selector] = 1;
+					}
+					console.log(map);
+					 // printing the string
+					$(".result h2 .sc").text(selector + " now has " + map[selector] + " votes!");
+					$(".selector").val(""); // clear box after
+				}
+			});
+		}
+
+        $(document).ready(main);
+		</script>
+
+	</head>
+		
+	<body>
+		<h1>Fabulous Pet Name Recorder</h1>
+
+		<section class="selector-input">
+				<h3 style="color:red;">Write a name for my dog: <input class="selector" type="text">
+        		<button class="submit">Submit</button></h3>
+				
+		</section>
+
+		<section class="result">
+
+			 <h2>What I found: <span class="sc"></span></h2>
+
+		</section>	
+
+	</body>
+
+
+</html>		

@@ -1,0 +1,36 @@
+<style type="text/css">
+      
+      body {
+        background: #E0FFFF;
+        width: 800px;
+        margin:auto;
+      }
+
+      h1 {
+        color: maroon;
+        text-align: center;
+      }
+
+      p {
+        color:gray;
+        border: 0px solid gray;
+        padding 10px;
+      }
+
+      .a {
+
+      }
+
+      .q {
+        font-weight: bold;
+      }
+
+      main {
+        line-height: 18px;
+      }
+
+      footer p {
+        color:black;
+      }
+
+    </style>

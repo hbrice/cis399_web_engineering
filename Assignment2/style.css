@@ -1,0 +1,103 @@
+/*
+HOLLY BRICE 
+CIS 399: Web Engineering
+WEBPAGE FOR AMAZERIFFIC 
+HOMEWORK 2; part 1 - style sheet.
+*/
+
+
+<style type="text/css">
+      
+      body {
+        background:#f9e933;
+        font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+      }
+      
+      header, main, footer {
+        min-width: 855px;
+      
+      }
+      
+      header .container, main .container, footer .container {
+        max-width: 855px;
+        margin: auto;
+        font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+
+      }
+
+      header {
+        background-color: white;
+        padding: 25px 0 25px 0;
+        background: white;
+        overflow: auto;
+        border-bottom: 1px solid #ddd;
+      }
+
+      header h1 {
+        float: left;
+        width: 570px;
+      }
+
+      main {
+        background-color: white;
+        border-radius: 0 5px 5px 5px;
+        padding: 40px;
+
+      }
+
+      header nav {
+        float: right;
+        width: 285px;
+      }
+      
+      main .bulb{
+        float:right;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-bottom: 50px;
+      }
+
+      footer nav {
+        float: right;
+         width: 285px;
+      }
+
+      footer .sitemap {
+        float: right;
+        width: 285px;
+      }
+      .amazer{
+        font-style: italic;
+        color: #800000;
+      }
+
+      footer .contact {
+        float: left;
+        width: 285px;
+      }
+
+      footer {
+        background-color:#f9e933; 
+        padding: 20px;
+        display: inline-block;
+        width: 100%;
+      }
+
+      footer h5 {
+        font-size: 14px;
+      }
+
+      a {
+        text-decoration: none;
+        color: red;
+      }
+      
+      main table {
+        width:80%;
+
+      }
+      table {
+        width:200px;
+      }
+
+</style>
