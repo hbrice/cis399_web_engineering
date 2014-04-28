@@ -91,48 +91,59 @@ var the_deal = [ {"person": slim, "hand": slim_hand, "counts": null, "value": nu
 function computeCounts(){
   the_deal.forEach( function ( player ){
     var ranks = player.hand.map( function ( card_obj ){ //takes an array player.hand and returns a new array player.hand.rank
+      console.log("card_obj.rank: "+ card_obj.rank);
       return card_obj.rank;
     });                                      
-    //e.g., ["two", "king", "nine", ...]
-    var counts = ranks.reduce( function (count_obj, rank){
-      if( rank in count_obj ) count_obj[rank]++; else count_obj[rank] = 1; );
-    }, {});
+    
+    console.log(ranks + " : are the ranks array");
+    console.log("counts is the returning array");
 
-    //);
-    player.counts = counts;                        
-    //e.g., counts = {"two": 3, "five": 1, "jack": 1}
+    var counts = ranks.reduce( function (count_obj, rank){            //e.g., ["two", "king", "nine", ...]
+      console.log("rank is : " + rank);
+        if( rank in count_obj ){
+            count_obj[rank]++;
+            console.log("count_obj[rank] " + count_obj[rank] + " for " + rank);
+            return count_obj;
+          } else{
+            count_obj[rank] = 1;
+            console.log("count_obj[rank] " + count_obj[rank] + " for " + rank);
+            return count_obj;
+          } 
+      }, { /* omitted */ });
+     player.counts = counts;    //e.g., counts = {"two": 3, "five": 1, "jack": 1}        
   });
 }
 
 //e.g., rank_array = ["two", "king", "nine", ...]
 function largestRank( rank_array ){
-      //return largest rank in array, e.g., "king"
-      rank_array.reduce (function (high, cur){ 
-        if( rank_to_number[cur] > rank_to_number[high] ) return cur; else return high;
-       }, "two");
+    //return largest rank in array, e.g., "king"
+    rank_array.reduce (function (high, cur){ 
+      if( rank_to_number[cur] > rank_to_number[high] ){
+        return cur;
+      }  else {
+        return high;
+      } 
+     }, "two");
 }
 
 function smallestRank( rank_array ){
       rank_array.reduce (function (low, cur){ 
         if( rank_to_number[cur] < rank_to_number[low] ) return cur; else return low;
        }, "ace");
-
 }
 
 //e.g., counter_obj = {"two": 1, "ace": 3, "nine": 1}, k = 3 => ["ace"]. if k = 2 => []. k = 1 => ["two", "nine"]
 function exactlyK( counter_obj, k ){
-
   //return array of ranks that appear k times in hand
-  return Object.key( counter_obj ).filter (function ( rank ) {
+  return Object.key( counter_obj ).filter (function ( rank ) { //filter takes in an array and returns true or false; if true - map object is copied to new array we're buliding.
     return counter_obj[rank] == k;
   });
-  //filter takes in an array and returns true or false; if true - map object is copied to new array we're buliding.
 }
 
 
 function computeGroup( player ){
   var counts = player.counts; //e.g. {"two": 1, "ace": 3, "nine": 1}
-
+  console.log(counts + " is the counts.");
   //return 4kind, 3kind, 2pair, pair, 1kind as appropriate (always highest possible)
 
 }
@@ -145,13 +156,14 @@ function isFullHouse( player ){
 
 function isStraight( player ){
     var counts = player.counts; //e.g. {"two": 1, "ace": 3, "nine": 1}
+    console.log(counts);
 
     //return true for both normal straight and special ace-low straight
 }
 
 function isFlush( player ){
     //return true if all suits the same
-    var suits = ...; //array of suits
+    var suits = new Array(5); //array of suits
     var first = suits[0];
     return suits.slice(1).every( function ( suit ) return suit == first; );
     //take the first element out and caa
