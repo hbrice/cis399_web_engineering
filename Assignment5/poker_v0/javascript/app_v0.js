@@ -117,13 +117,14 @@ function computeCounts(){
 //e.g., rank_array = ["two", "king", "nine", ...]
 function largestRank( rank_array ){
     //return largest rank in array, e.g., "king"
-    rank_array.reduce (function (high, cur){ 
+     return rank_array.reduce (function (high, cur){ 
       if( rank_to_number[cur] > rank_to_number[high] ){
         return cur;
       }  else {
         return high;
-      } 
+      }
      }, "two");
+   
 }
 
 function smallestRank( rank_array ){
