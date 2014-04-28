@@ -118,17 +118,12 @@ function computeCounts(){
 function largestRank( rank_array ){
     //return largest rank in array, e.g., "king"
      return rank_array.reduce (function (high, cur){ 
-      if( rank_to_number[cur] > rank_to_number[high] ){
-        return cur;
-      }  else {
-        return high;
-      }
-     }, "two");
-   
+      if( rank_to_number[cur] > rank_to_number[high] ) return cur; else return high;
+     }, "two");  
 }
 
 function smallestRank( rank_array ){
-      rank_array.reduce (function (low, cur){ 
+      return rank_array.reduce (function (low, cur){ 
         if( rank_to_number[cur] < rank_to_number[low] ) return cur; else return low;
        }, "ace");
 }
