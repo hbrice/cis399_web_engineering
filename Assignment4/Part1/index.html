@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Weather</title>
+      <meta charset="utf-8">
+
+      <link href="stylesheets/reset.css" rel="stylesheet" type="text/css">
+      <link href="stylesheets/style.css" rel="stylesheet" type="text/css">  
+      <link href="http://api.openweathermap.org/data/2.5/weather?q=London,uk">
+  </head>
+
+  <body>
+    <header>
+      <div class="container">
+        <h1>Weather</h1>
+      </div>
+    </header>
+
+
+    <main>
+      <div class="container">
+        <div class="tabs">
+          <a href=""><span class="active">Weather Forcast</span></a>
+        </div>
+        <div class="content">
+        </div>
+        <div class="result">
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+      </div>
+    </footer>
+
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="javascripts/weather.js"></script>
+    <script src="javascripts/app.js"></script>
+
+  </body>
+</html>
