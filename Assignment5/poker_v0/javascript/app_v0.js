@@ -60,26 +60,26 @@ var pete = {"handle": "pete",
 
 var slim_hand=[
   { "rank":"two", "suit":"spades" },
-  { "rank":"four", "suit":"hearts" },
-  { "rank":"two", "suit":"clubs" },
+  { "rank":"four", "suit":"spades" },
+  { "rank":"two", "suit":"spades" },
   { "rank":"king", "suit":"spades" },
-  { "rank":"eight", "suit":"diamonds"}
+  { "rank":"eight", "suit":"spades"}
 ];
 
 var annie_hand=[
   { "rank":"two", "suit":"hearts" },
-  { "rank":"four", "suit":"clubs" },
-  { "rank":"two", "suit":"spades" },
-  { "rank":"king", "suit":"hearts" },
-  { "rank":"eight", "suit":"spades" }
+  { "rank":"three", "suit":"clubs" },
+  { "rank":"four", "suit":"spades" },
+  { "rank":"five", "suit":"hearts" },
+  { "rank":"six", "suit":"spades" }
 ];
 
 var pete_hand=[
-  { "rank":"two", "suit":"diamonds" },
-  { "rank":"six", "suit":"spades" },
   { "rank":"two", "suit":"spades" },
-  { "rank":"nine", "suit":"spades" },
-  { "rank":"nine", "suit":"spades" }
+  { "rank":"three", "suit":"spades" },
+  { "rank":"four", "suit":"spades" },
+  { "rank":"five", "suit":"spades" },
+  { "rank":"ace", "suit":"spades" }
 ];
 
 var the_deal = [ {"person": slim, "hand": slim_hand, "counts": null, "value": null, "place": 0},   //e.g., counts = {"two": 3, "five": 1, "jack": 1}
@@ -89,79 +89,91 @@ var the_deal = [ {"person": slim, "hand": slim_hand, "counts": null, "value": nu
 
 
 function computeCounts(){
-  the_deal.forEach( function ( player ){
+  the_deal.forEach( function ( player, i ){
     var ranks = player.hand.map( function ( card_obj ){ //takes an array player.hand and returns a new array player.hand.rank
-     // console.log("card_obj.rank: "+ card_obj.rank);
       return card_obj.rank;
-    });                                      
- //   console.log(ranks + " : are the ranks array");
-  //  console.log("counts is the returning array");
+    });
+    console.log(ranks + " : are the ranks array");
+    console.log("counts is the returning array");
     var counts = ranks.reduce( function (count_obj, rank){            //e.g., ["two", "king", "nine", ...]
-  //    console.log("rank is : " + rank);
+      console.log("rank is : " + rank);
         if( rank in count_obj ){
             count_obj[rank]++;
-      //      console.log("count_obj[rank] " + count_obj[rank] + " for " + rank);
+            console.log("count_obj[rank] " + count_obj[rank] + " for " + rank);
             return count_obj;
           } else{
             count_obj[rank] = 1;
-     //      console.log("count_obj[rank] " + count_obj[rank] + " for " + rank);
+            console.log("count_obj[rank] " + count_obj[rank] + " for " + rank);
             return count_obj;
-          } 
+          }
       }, { /* omitted */ });
      player.counts = counts;    //e.g., counts = {"two": 3, "five": 1, "jack": 1}
-     //maybe return player.counts = counts; ??
-     console.log(player.counts);        
+   //  console.log(JSON.stringify(player.counts, null, 4)); // important for later
   });
 }
 
 function largestRank( rank_array ){ //e.g., rank_array = ["two", "king", "nine", ...]
     //return largest rank in array, e.g., "king"
-     return rank_array.reduce (function (high, cur){ 
+     return rank_array.reduce (function (high, cur){
       if( rank_to_number[cur] > rank_to_number[high] ) return cur; else return high;
-     }, "two");  
+     }, "two");
 }
 
 function smallestRank( rank_array ){
-      return rank_array.reduce (function (low, cur){ 
+      return rank_array.reduce (function (low, cur){
         if( rank_to_number[cur] < rank_to_number[low] ) return cur; else return low;
        }, "ace");
 }
 
 function exactlyK( counter_obj, k ){  //e.g., counter_obj = {"two": 1, "ace": 3, "nine": 1}, k = 3 => ["ace"]. if k = 2 => []. k = 1 => ["two", "nine"]
   //return array of ranks that appear k times in hand
-  return Object.key( counter_obj ).filter (function ( rank ) { //filter takes in an array and returns true or false; if true - map object is copied to new array we're buliding.
-      console.log("counter_obj[rank] " + counter_obj[rank]);
+  return Object.keys( counter_obj ).filter (function ( rank ) { //filter takes in an array and returns true or false; if true - map object is copied to new array we're buliding.
       return counter_obj[rank] == k;
   });
 }
 
 function computeGroup( player ){
-
   var counts = player.counts; //e.g. {"two": 1, "ace": 3, "nine": 1}
-
-  if ( player.rank == 4) {
-    console.log("444444");
+  if ( exactlyK( counts, 4).length){
+    return "4kind";
+  } else if ( exactlyK( counts, 3).length){
+    return "3kind";
+  } else if ( exactlyK( counts, 2).length){
+    return "2kind";
+  } else if (exactlyK( counts, 1).length){
+    return "1kind";
+  } else {
+    console.log("problem!!!");
   }
   //return 4kind, 3kind, 2pair, pair, 1kind as appropriate (always highest possible)
-
 }
 
 function isFullHouse( player ){
     var counts = player.counts; //e.g. {"two": 1, "ace": 3, "nine": 1}
+    return ( exactlyK( counts, 3).length && exactlyK(counts, 2).length);
 
   //return true if player holds full-house
 }
 
 function isStraight( player ){
     var counts = player.counts; //e.g. {"two": 1, "ace": 3, "nine": 1}
-    console.log(counts);
-
+    var hand = [];
+    player.hand.forEach(function ( obj, i ){
+        hand[i] = obj.rank;
+    });
+    var large = rank_to_number[largestRank(hand)];
+    var small = rank_to_number[smallestRank(hand)];
+    var math = large - small + 1;
+    return ( (math == 5 || math == 13) && computeGroup(player)==="1kind");
     //return true for both normal straight and special ace-low straight
 }
 
 function isFlush( player ){
     //return true if all suits the same
-    var suits = player.;  //new Array(5); //array of suits
+    var suits = [];
+    player.hand.forEach(function ( obj, i ){
+        suits[i] = obj.suit;
+    });
     var first = suits[0];
     return suits.slice(1).every( function ( suit ){
       return suit == first;
@@ -171,7 +183,7 @@ function isFlush( player ){
 
 function isStraightFlush( player ){
     //do the obvious
-    if ( isFlush(player) && isStraight(player) ) return true; else false;
+    return ( isFlush(player) && isStraight(player) );
 }
 
 
