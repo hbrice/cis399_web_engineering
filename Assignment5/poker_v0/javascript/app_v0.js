@@ -82,9 +82,9 @@ var pete_hand=[
   { "rank":"ace", "suit":"spades" }
 ];
 
-var the_deal = [ {"person": slim, "hand": slim_hand, "counts": null, "value": null, "place": 0},   //e.g., counts = {"two": 3, "five": 1, "jack": 1}
-                 {"person": annie, "hand": annie_hand, "counts": null, "value": null, "place": 0}, //e.g., place = 1,2,3. Ties have same number.
-                 {"person": pete, "hand": pete_hand, "counts": null, "value": null, "place": 0}     //e.g., value = 1kind, pair, straight, etc.
+var the_deal = [ {"person": slim, "hand": slim_hand, "counts": null, "value": null, "place": 0, "highcard": null},   //e.g., counts = {"two": 3, "five": 1, "jack": 1}
+                 {"person": annie, "hand": annie_hand, "counts": null, "value": null, "place": 0, "highcard": null}, //e.g., place = 1,2,3. Ties have same number.
+                 {"person": pete, "hand": pete_hand, "counts": null, "value": null, "place": 0, "highcard": null}     //e.g., value = 1kind, pair, straight, etc.
                 ];
 
 
@@ -111,6 +111,7 @@ function computeCounts(){
    //  console.log(JSON.stringify(player.counts, null, 4)); // important for later
   });
 }
+
 
 function largestRank( rank_array ){ //e.g., rank_array = ["two", "king", "nine", ...]
     //return largest rank in array, e.g., "king"
@@ -162,6 +163,7 @@ function isStraight( player ){
         hand[i] = obj.rank;
     });
     var large = rank_to_number[largestRank(hand)];
+    player.highcard = large;
     var small = rank_to_number[smallestRank(hand)];
     var math = large - small + 1;
     return ( (math == 5 || math == 13) && computeGroup(player)==="1kind");
