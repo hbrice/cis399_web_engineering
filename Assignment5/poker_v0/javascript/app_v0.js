@@ -93,17 +93,12 @@ function computeCounts(){
     var ranks = player.hand.map( function ( card_obj ){ //takes an array player.hand and returns a new array player.hand.rank
       return card_obj.rank;
     });
-    console.log(ranks + " : are the ranks array");
-    console.log("counts is the returning array");
     var counts = ranks.reduce( function (count_obj, rank){            //e.g., ["two", "king", "nine", ...]
-      console.log("rank is : " + rank);
         if( rank in count_obj ){
             count_obj[rank]++;
-            console.log("count_obj[rank] " + count_obj[rank] + " for " + rank);
             return count_obj;
           } else{
             count_obj[rank] = 1;
-            console.log("count_obj[rank] " + count_obj[rank] + " for " + rank);
             return count_obj;
           }
       }, { /* omitted */ });
@@ -150,13 +145,13 @@ function computeGroup( player ){
 }
 
 function isFullHouse( player ){
+  //return true if player holds full-house
     var counts = player.counts; //e.g. {"two": 1, "ace": 3, "nine": 1}
     return ( exactlyK( counts, 3).length && exactlyK(counts, 2).length);
-
-  //return true if player holds full-house
 }
 
 function isStraight( player ){
+      //return true for both normal straight and special ace-low straight
     var counts = player.counts; //e.g. {"two": 1, "ace": 3, "nine": 1}
     var hand = [];
     player.hand.forEach(function ( obj, i ){
@@ -167,7 +162,6 @@ function isStraight( player ){
     var small = rank_to_number[smallestRank(hand)];
     var math = large - small + 1;
     return ( (math == 5 || math == 13) && computeGroup(player)==="1kind");
-    //return true for both normal straight and special ace-low straight
 }
 
 function isFlush( player ){
@@ -180,18 +174,31 @@ function isFlush( player ){
     return suits.slice(1).every( function ( suit ){
       return suit == first;
     });
-    //take the first element out and caa
 }
 
 function isStraightFlush( player ){
-    //do the obvious
     return ( isFlush(player) && isStraight(player) );
 }
 
 
 function computeValues(){
-
     //for each player, compute value of hand and then fill in player.value
+    the_deal.forEach( function ( player, i ){
+    var value = player.hand.map( function ( card_obj ){ //takes an array player.hand and returns a new array player.hand.rank
+      return card_obj.rank;
+    });
+    var counts = ranks.reduce( function (count_obj, rank){            //e.g., ["two", "king", "nine", ...]
+        if( rank in count_obj ){
+            count_obj[rank]++;
+            return count_obj;
+          } else{
+            count_obj[rank] = 1;
+            return count_obj;
+          }
+      }, { /* omitted */ });
+     player.counts = counts;    //e.g., counts = {"two": 3, "five": 1, "jack": 1}
+   //  console.log(JSON.stringify(player.counts, null, 4)); // important for later
+  });
 }
 
 function computePlaces(){
@@ -202,6 +209,7 @@ function computePlaces(){
   }
 
 function kickerSequence( player1, player2 ){
+
     //for 1kind and flush ties, sort ranks and compare one by one.
     //return winning player or null if true tie
 }
