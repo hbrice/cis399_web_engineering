@@ -102,16 +102,27 @@
 				console.log( person );
 				var suit = $("#suit-radio-btn label.active input").val();
 				console.log( suit );
-				var rank = $("#rank-select value").val();
+				var rank = $("#rank-select").val();
 				console.log( rank );
 
 				// add the selected card to the selected person's hand
-			$('#' + person).append(...)
+		//		$('#' + person).
+
+			//	person.hand = {"rank": rank, "suit": suit};
+				var hand = [];
+				hand.push({"rank": rank, "suit": suit});
+				console.log(JSON.stringify(hand, null, 4));
+				$('#' + person).append(rank + " of " + suit).append("<br>");
+		//		return hand;
 			});
 
+			// RESET THE CONTAINER FOR THE PERSON CLICKED --DONE :D
 			$("button.reset_btn").click(function(event){
+				var id = $(this).attr('id');
+				var id2 = id.split("_");
+				var idname = id2.slice(0,1);
+				$("#hands-container  .my-person-container #" + idname).empty();
 				console.log('RESET');
-
 			});
 
 			$("button#winner").click(function(event){
@@ -120,16 +131,18 @@
                 the_deal.forEach(
                     function( player ){
                       var name = player.person.handle;
-                       var $all_cards = $(...);
-                       console.log ( $all_cards );
+                       var $all_cards = $(player.hand);
+                     //  console.log ( $all_cards );
 
                        //$hand = [{rank: "two", suit: "clubs"}, {...}. etc.] - an array of five card objects
                        var $hand = $all_cards.map(
                           function (i, card){         //jquery map has args reversed - sigh
                                var $card = $(card);   //jquery map unwraps arg - need to wrap it again
                                var obj = {};
-                               obj.rank = ...;
-                               obj.suit = ...;
+                               obj.rank = $card.rank;
+//                               console.log(obj.rank);
+                               obj.suit = $card.suit;
+//                               console.log(obj.suit);
                                return obj;
                           });
                        player.hand = $.makeArray( $hand );    //now have simple array
@@ -141,11 +154,11 @@
                 the_deal.forEach(
                     function( player ){
                        var name = player.person.handle;
-                       var $result = $(...);   //find the result div to place value in
-                      $result.text( "" );                        //clear it for the heck of it
-                       $result.text( player.value );              //put the hand value in
+                       var $result = $("#result-container .my-person-container .my-result-container"); //** find the result div to place value in
+                       $result.text( "" );       //clear it for the heck of it
+                       $result.text( player.value );    //put the hand value in
 
-                       var $place = $(...);     //find the rank div to place value in
+                       var $place = $("#result-container .my-person-container .my-rank-container"); //** find the rank div to place value in
                        $place.text( "" );                        //clear it for the heck of it
                        $place.text( player.place );              //put the player's place in
                     });
@@ -154,8 +167,8 @@
 
 
         $(document).ready( function (){
-                              init();
-                            });
+          init();
+        });
 	</script>
 </head>
 	<body>

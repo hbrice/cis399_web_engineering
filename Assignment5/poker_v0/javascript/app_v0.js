@@ -59,27 +59,27 @@ var pete = {"handle": "pete",
             "winnings": 0};
 
 var slim_hand=[
-  { "rank":"two", "suit":"spades" },
-  { "rank":"four", "suit":"spades" },
-  { "rank":"two", "suit":"spades" },
-  { "rank":"king", "suit":"spades" },
-  { "rank":"eight", "suit":"spades"}
-];
+  // { "rank":"two", "suit":"spades" },
+  // { "rank":"four", "suit":"spades" },
+  // { "rank":"two", "suit":"spades" },
+  // { "rank":"king", "suit":"spades" },
+  // { "rank":"eight", "suit":"spades"}
+]; 
 
 var annie_hand=[
-  { "rank":"two", "suit":"hearts" },
-  { "rank":"three", "suit":"clubs" },
-  { "rank":"four", "suit":"spades" },
-  { "rank":"five", "suit":"hearts" },
-  { "rank":"six", "suit":"spades" }
+  // { "rank":"two", "suit":"hearts" },
+  // { "rank":"three", "suit":"clubs" },
+  // { "rank":"four", "suit":"spades" },
+  // { "rank":"five", "suit":"hearts" },
+  // { "rank":"six", "suit":"spades" }
 ];
 
 var pete_hand=[
-  { "rank":"two", "suit":"spades" },
-  { "rank":"three", "suit":"spades" },
-  { "rank":"four", "suit":"spades" },
-  { "rank":"five", "suit":"spades" },
-  { "rank":"ace", "suit":"spades" }
+  // { "rank":"two", "suit":"spades" },
+  // { "rank":"three", "suit":"spades" },
+  // { "rank":"four", "suit":"spades" },
+  // { "rank":"five", "suit":"spades" },
+  // { "rank":"ace", "suit":"spades" }
 ];
 
 var the_deal = [ {"person": slim, "hand": slim_hand, "counts": null, "value": null, "place": 0, "highcard": null},   //e.g., counts = {"two": 3, "five": 1, "jack": 1}
@@ -169,6 +169,7 @@ function isFlush( player ){
     var suits = [];
     player.hand.forEach(function ( obj, i ){
         suits[i] = obj.suit;
+        console.log(suits[i]);
     });
     var first = suits[0];
     return suits.slice(1).every( function ( suit ){
@@ -184,24 +185,52 @@ function isStraightFlush( player ){
 function computeValues(){
     //for each player, compute value of hand and then fill in player.value
     the_deal.forEach( function ( player, i ){
-    var value = player.hand.map( function ( card_obj ){ //takes an array player.hand and returns a new array player.hand.rank
-      return card_obj.rank;
+      var value = null;
+//      console.log(player);
+      var test1 = isStraightFlush ( player );
+//      console.log("test1: " + test1);
+      var test2 = computeGroup( player ); //four of a kind
+//      console.log("highest kind: " + test2);
+      var test3 = isFullHouse( player );  //full house 
+//      console.log("test3: " + test3);
+      var test4 = isFlush( player );
+//      console.log("test4: " + test4);
+      var test5 = isStraight( player );
+ //     console.log("test5: " + test5);
+
+      if(test1 == true){
+        value = "straightflush";  //straight flush
+      } else if(test2 == "4kind"){
+        value = "4kind";          //4 of a kind
+      } else if(test3 == true){
+        value = "fullhouse";      //full house
+      } else if(test4 == true){
+        value = "flush";          //flush
+      } else if(test5 == true){
+        value = "straight";       //straight
+      } else if(test2 == "3kind"){
+        value = "3kind";          //3 of a kind 
+      } else if(test2 == "2 kind"){
+        value = "pair";           //2pair pair ---still need
+      } else {
+        value = "1pair";
+      }
+      console.log("Value: " + value);
+      player.value = value;
+      console.log(player);
+
     });
-    var counts = ranks.reduce( function (count_obj, rank){            //e.g., ["two", "king", "nine", ...]
-        if( rank in count_obj ){
-            count_obj[rank]++;
-            return count_obj;
-          } else{
-            count_obj[rank] = 1;
-            return count_obj;
-          }
-      }, { /* omitted */ });
-     player.counts = counts;    //e.g., counts = {"two": 3, "five": 1, "jack": 1}
-   //  console.log(JSON.stringify(player.counts, null, 4)); // important for later
-  });
 }
 
 function computePlaces(){
+  the_deal.forEach( function ( player, i ){
+    var place = 0;
+    
+
+
+    player.place = place;
+  });
+
 
   //use values of players' hands to figure out their placement (1,2,3)
   //Tricky part is ties on hand value, e.g., slim and pete both have 1kind.
