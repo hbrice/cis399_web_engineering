@@ -59,27 +59,27 @@ var pete = {"handle": "pete",
             "winnings": 0};
 
 var slim_hand=[
-  // { "rank":"two", "suit":"spades" },
-  // { "rank":"four", "suit":"spades" },
-  // { "rank":"two", "suit":"spades" },
-  // { "rank":"king", "suit":"spades" },
-  // { "rank":"eight", "suit":"spades"}
+  { "rank":"two", "suit":"spades" },
+  { "rank":"four", "suit":"spades" },
+  { "rank":"two", "suit":"spades" },
+  { "rank":"seven", "suit":"hearts" },
+  { "rank":"eight", "suit":"spades"}
 ]; 
 
 var annie_hand=[
-  // { "rank":"two", "suit":"hearts" },
-  // { "rank":"three", "suit":"clubs" },
-  // { "rank":"four", "suit":"spades" },
-  // { "rank":"five", "suit":"hearts" },
-  // { "rank":"six", "suit":"spades" }
+  { "rank":"two", "suit":"hearts" },
+  { "rank":"three", "suit":"clubs" },
+  { "rank":"four", "suit":"spades" },
+  { "rank":"five", "suit":"hearts" },
+  { "rank":"six", "suit":"spades" }
 ];
 
 var pete_hand=[
-  // { "rank":"two", "suit":"spades" },
-  // { "rank":"three", "suit":"spades" },
-  // { "rank":"four", "suit":"spades" },
-  // { "rank":"five", "suit":"spades" },
-  // { "rank":"ace", "suit":"spades" }
+  { "rank":"two", "suit":"spades" },
+  { "rank":"three", "suit":"spades" },
+  { "rank":"four", "suit":"spades" },
+  { "rank":"five", "suit":"spades" },
+  { "rank":"ace", "suit":"spades" }
 ];
 
 var the_deal = [ {"person": slim, "hand": slim_hand, "counts": null, "value": "1kind", "place": 3, "highcard": null},   //e.g., counts = {"two": 3, "five": 1, "jack": 1}
@@ -203,6 +203,8 @@ function computeValues(){
       var test4 = isFlush( player );
 //      console.log("test4: " + test4);
       var test5 = isStraight( player );
+      var cnt = player.counts;
+      var cnt2 = 0;
  //     console.log("test5: " + test5);
 
       if(test1 == true){
@@ -219,7 +221,16 @@ function computeValues(){
         value = "3kind";          //3 of a kind 
       } else if(test2 == "2kind"){
         //check to see if 2 pair 
-        value = "pair";           //2pair pair ---still need
+        $.each(cnt, function( index, value ){
+          if(value == 2){
+              cnt2++;
+          }
+        });
+        if(cnt2 == 2){
+          value = "2pair";
+        } else{
+          value = "pair";
+        }
       } else {
         value = "1kind";
       }
