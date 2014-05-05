@@ -196,7 +196,7 @@ function isStraightFlush( player ){
     return ( isFlush(player) && isStraight(player) );
 }
 
-
+//DONE!
 function computeValues(){
     //for each player, compute value of hand and then fill in player.value
     the_deal.forEach( function ( player, i ){
@@ -242,6 +242,7 @@ function computeValues(){
     });
 }
 
+
 function computePlaces(){
   the_deal.forEach( function ( player, i ){
     var name = player.person.handle;
@@ -277,12 +278,42 @@ function computePlaces(){
     var place = 0;
 
       //compare the two players in case of a tie
-    if(the_deal[0].highRank == the_deal[1].highRank){     
+    if(the_deal[0].highRank == the_deal[1].highRank){  
+      console.log("entered here.");
       winner = kickerSequence(the_deal[0], the_deal[1]);
+
+      if(the_deal[0].highRank > the_deal[2]){
+        the_deal[2].place = 3;
+        if(winner == "player1"){
+          the_deal[0].place = 1;
+          the_deal[1].place = 2;
+        } else if(winner == "player2") {
+          the_deal[0].place = 2;
+          the_deal[1].place = 1;
+        } else{
+          console.log("True tie");
+        }
+      } else{
+        the_deal[2].place = 1;
+        if(winner == "player1"){
+          the_deal[0].place = 2;
+          the_deal[1].place = 3;
+        } else if(winner == "player2") {
+          the_deal[0].place = 3;
+          the_deal[1].place = 2;
+        } else{
+          console.log("True tie");
+        }
+      }
+
+
     } else if(the_deal[0].highRank == the_deal[2].highRank){
       winner = kickerSequence(the_deal[0], the_deal[2]);
     } else if(the_deal[1].highRank == the_deal[2].highRank){
       winner = kickerSequence(the_deal[1], the_deal[2]);
+
+
+      //END OF TIES
     } else if (the_deal[0].highRank > the_deal[1].highRank && the_deal[0].highRank > the_deal[2].highRank){ // player1 gets 1st place
       the_deal[0].place = 1;
       if(the_deal[1].highRank > the_deal[2].highcard){
@@ -318,10 +349,6 @@ function computePlaces(){
     console.log(the_deal[0].person.handle + " " + the_deal[0].place);
     console.log(the_deal[1].person.handle + " " + the_deal[1].place);
     console.log(the_deal[2].person.handle + " " + the_deal[2].place);
-
-
- //   player.place = place;    
-
   
   //use values of players' hands to figure out their placement (1,2,3)
   //Tricky part is ties on hand value, e.g., slim and pete both have 1kind.
@@ -332,9 +359,78 @@ function computePlaces(){
 
 
 function kickerSequence( player1, player2 ){
-
+  console.log("entered kicker");
     //for 1kind and flush ties, sort ranks and compare one by one.
     //return winning player or null if true tie
+    var winner;
+    
+    var p1 = player1.highcard;  // highest card in hand
+    var p1val = player1.value; //type fullhouse
+
+    console.log("player1: " + p1, p1val);
+    var group1 = computeGroup(player1);
+    console.log(group1); //3kind
+
+
+    var p1counts = player1.counts; //e.g. {"two": 1, "ace": 3, "nine": 1}
+    console.log(p1counts);
+    var p2counts = player2.counts;
+    
+    var p2 = player2.highcard;
+    var p2val = player2.value;
+
+    //temp variables
+    var t1, t2; // player 1
+    var q1, q2; // player 2
+
+  // BEGIN FULL HOUSE, compare 3 of a kind then 2 of a kind
+      $.each(p1counts, function(key, value) {
+        console.log(key, value);
+        if (value == 3){
+          t1 = key;
+        }
+        if (value == 2){
+          t2 = key;
+        }
+      });
+
+      $.each(p2counts, function(key, value) {
+        console.log(key, value);
+        if (value == 3){
+          q1 = key;
+        }
+        if (value == 2){
+          q2 = key;
+        }
+      });
+
+      if(t1 > q1){
+        return "player1";
+      } else if(q1 > t1){
+        return "player2";
+      } else if(t2 > q2){
+        return "player1";
+      } else if(q2 > t2){
+        return "player2";
+      } else{
+        //continue on comparing
+      }
+
+      //END OF FULL HOUSE
+
+
+
+
+    console.log("player2: " + p2, p2val);
+    if(p1 > p2){
+      return "player1";
+    } else if( p2 > p1){
+      return "player2";
+    } else if( p1 == p2 ){
+      console.log("they tied in the kicker");
+    } else{
+      console.log("lalala");
+    }
 }
 
 
