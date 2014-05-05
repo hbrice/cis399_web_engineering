@@ -96,6 +96,11 @@
 
 		function init(){
 
+			//variabels to determine how many cards there are
+			var slimCtr = 0;
+			var peteCtr = 0
+			var annieCtr = 0;
+
 			$("button#add-card-btn").click(function(event){
 				// get the selected person, suit, and rank
 				var person = $("#person-radio-btn label.active input").val();
@@ -105,15 +110,22 @@
 				var rank = $("#rank-select").val();
 				console.log( rank );
 
+				var array = person + "Ctr";
+			//	console.log("array: " + array);
+				if(array == "slimCtr" && slimCtr < 5){
+					slimCtr++;
+					$('#' + person).append(rank + " of " + suit).append("<br>");
+				} else if(array == "peteCtr" && peteCtr < 5){
+					peteCtr++;
+					$('#' + person).append(rank + " of " + suit).append("<br>");
+				} else if(array == "annieCtr" && annieCtr < 5){
+					annieCtr++;
+					$('#' + person).append(rank + " of " + suit).append("<br>");
+				} else{
+					console.log("ERROR: Can't add to hand.");
+				}
 				// add the selected card to the selected person's hand
-		//		$('#' + person).
 
-			//	person.hand = {"rank": rank, "suit": suit};
-			//	var hand = [];
-			//	hand.push({"rank": rank, "suit": suit});
-		//		console.log(JSON.stringify(hand, null, 4));
-				$('#' + person).append(rank + " of " + suit).append("<br>");
-		//		return hand;
 			});
 
 			// RESET THE CONTAINER FOR THE PERSON CLICKED --DONE :D
@@ -121,6 +133,16 @@
 				var id = $(this).attr('id');
 				var id2 = id.split("_");
 				var idname = id2.slice(0,1);
+				var nameCtr = idname + "Ctr";	//for resetting the ctr
+				if(nameCtr == "slimCtr"){
+					slimCtr = 0;
+				} else if(nameCtr == "peteCtr"){
+					peteCtr = 0;
+				} else if(nameCtr == "annieCtr"){
+					annieCtr = 0;
+				} else{
+					console.log("ERROR: Can't reset hand to zero.");
+				}
 				$("#hands-container  .my-person-container #" + idname).empty();
 				console.log('RESET');
 			});
@@ -128,7 +150,11 @@
 			$("button#winner").click(function(event){
 				console.log('WINNER');
                 //the_deal = [ {person: slim, hand: slim_hand, counts: null, value: null, place: null }, etc. ]
-                the_deal.forEach(
+               	if(slimCtr == 5 && peteCtr == 5 && annieCtr == 5){
+               		//do all the functions
+               		console.log("Can find winner!");
+
+					the_deal.forEach(
                     function( player ){
                       var name = player.person.handle;
                   //    console("name: " + name);
@@ -175,6 +201,11 @@
                        $place.text( "" );                        //clear it for the heck of it
                        $place.text( player.place );              //put the player's place in
                     });
+
+               	} else {
+               		//abort
+               		console.log("Sorry, not all players have 5 cards in hand.");
+               	}
             });
         }
 
