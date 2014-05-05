@@ -60,18 +60,18 @@ var pete = {"handle": "pete",
 
 var slim_hand=[
   { "rank":"two", "suit":"spades" },
-  { "rank":"four", "suit":"spades" },
+  { "rank":"three", "suit":"spades" },
   { "rank":"two", "suit":"spades" },
-  { "rank":"seven", "suit":"hearts" },
-  { "rank":"eight", "suit":"spades"}
+  { "rank":"three", "suit":"hearts" },
+  { "rank":"three", "suit":"spades"}
 ]; 
 
 var annie_hand=[
   { "rank":"two", "suit":"hearts" },
-  { "rank":"three", "suit":"clubs" },
+  { "rank":"four", "suit":"clubs" },
   { "rank":"four", "suit":"spades" },
-  { "rank":"five", "suit":"hearts" },
-  { "rank":"six", "suit":"spades" }
+  { "rank":"two", "suit":"hearts" },
+  { "rank":"four", "suit":"spades" }
 ];
 
 var pete_hand=[
@@ -82,10 +82,18 @@ var pete_hand=[
   { "rank":"ace", "suit":"spades" }
 ];
 
-var the_deal = [ {"person": slim, "hand": slim_hand, "counts": null, "value": "1kind", "place": 3, "highcard": null},   //e.g., counts = {"two": 3, "five": 1, "jack": 1}
-                 {"person": annie, "hand": annie_hand, "counts": null, "value": "pair", "place": 2, "highcard": null}, //e.g., place = 1,2,3. Ties have same number.
-                 {"person": pete, "hand": pete_hand, "counts": null, "value": "fullhouse", "place": 1, "highcard": null}     //e.g., value = 1kind, pair, straight, etc.
-                ];
+//*** testing functions in this file-- use this "the_deal"
+var the_deal = [ {"person": slim, "hand": slim_hand, "counts": null, "value": null, "place": 0, "highcard": 0, "highRank": 0},   //e.g., counts = {"two": 3, "five": 1, "jack": 1}
+                 {"person": annie, "hand": annie_hand, "counts": null, "value": null, "place": 0, "highcard": 0, "highRank": 0}, //e.g., place = 1,2,3. Ties have same number.
+                 {"person": pete, "hand": pete_hand, "counts": null, "value": null, "place": 0, "highcard": 0, "highRank": 0}     //e.g., value = 1kind, pair, straight, etc.
+                ];  //highcard - the highest card in their hand. ie "ace" = 13. //highRank - where their hand stands commpared to the poker_hands array
+
+
+//*** Dummy Data for html file. Use this "the_deal"
+// var the_deal = [ {"person": slim, "hand": slim_hand, "counts": null, "value": "2pair", "place": 2, "highcard": 0, "highRank": 0},   //e.g., counts = {"two": 3, "five": 1, "jack": 1}
+//                  {"person": annie, "hand": annie_hand, "counts": null, "value": "1kind", "place": 3, "highcard": 0, "highRank": 0}, //e.g., place = 1,2,3. Ties have same number.
+//                  {"person": pete, "hand": pete_hand, "counts": null, "value": "fullhouse", "place": 1, "highcard": 0, "highRank": 0}     //e.g., value = 1kind, pair, straight, etc.
+//                 ];  //highcard - the highest card in their hand. ie "ace" = 13. //highRank - where their hand stands commpared to the poker_hands array
 
 //DONE!
 function computeCounts(){
@@ -193,19 +201,13 @@ function computeValues(){
     //for each player, compute value of hand and then fill in player.value
     the_deal.forEach( function ( player, i ){
       var value = null;
-//      console.log(player);
       var test1 = isStraightFlush ( player );
-//      console.log("test1: " + test1);
       var test2 = computeGroup( player ); //four of a kind
-//      console.log("highest kind: " + test2);
       var test3 = isFullHouse( player );  //full house 
-//      console.log("test3: " + test3);
       var test4 = isFlush( player );
-//      console.log("test4: " + test4);
       var test5 = isStraight( player );
       var cnt = player.counts;
       var cnt2 = 0;
- //     console.log("test5: " + test5);
 
       if(test1 == true){
         value = "straightflush";  //straight flush
@@ -221,7 +223,7 @@ function computeValues(){
         value = "3kind";          //3 of a kind 
       } else if(test2 == "2kind"){
         //check to see if 2 pair 
-        $.each(cnt, function( index, value ){
+        $.each(cnt, function( index, value ){ // goes through each count to see if there is a pair
           if(value == 2){
               cnt2++;
           }
@@ -237,24 +239,97 @@ function computeValues(){
       console.log("Value: " + value);
       player.value = value;
       console.log(player);
-
     });
 }
 
 function computePlaces(){
   the_deal.forEach( function ( player, i ){
-    var place = 0;
     var name = player.person.handle;
     // check their value and compare
-
-    player.place = place;
+    var value = player.value; // (ie. pair)
+    console.log("value: " + value);
+    var j = 0;  // value of player
+    var arrayLen = poker_hands.length;
+    
+    //go through poker_hands and find how far in the array the player is
+    for(var k = 0; k < arrayLen; k++){
+      if(poker_hands[k] == value){
+        j = k;
+      }
+    }
+    //assign highRank to the player.. farther in the array is higher the rank (ie. 9) -- this is a number
+    if( name == "slim"){
+      player.highRank = j
+      console.log("slim's highRank: " + player.highRank);
+    } else if( name == "pete"){
+      player.highRank = j
+      console.log("pete's highRank: " + player.highRank);
+    } else if( name == "annie"){
+      player.highRank = j
+      console.log("annie's highRank: " + player.highRank);
+    } else {
+      console.log("ERROR: in ComputerPlaces()");
+    }
   });
 
+  //iterate throught players again -- because now they all have a highRank
+    var winner; //used to determine when a winner is returned from kickerSequence
+    var place = 0;
 
+      //compare the two players in case of a tie
+    if(the_deal[0].highRank == the_deal[1].highRank){     
+      winner = kickerSequence(the_deal[0], the_deal[1]);
+    } else if(the_deal[0].highRank == the_deal[2].highRank){
+      winner = kickerSequence(the_deal[0], the_deal[2]);
+    } else if(the_deal[1].highRank == the_deal[2].highRank){
+      winner = kickerSequence(the_deal[1], the_deal[2]);
+    } else if (the_deal[0].highRank > the_deal[1].highRank && the_deal[0].highRank > the_deal[2].highRank){ // player1 gets 1st place
+      the_deal[0].place = 1;
+      if(the_deal[1].highRank > the_deal[2].highcard){
+        the_deal[1].place = 2;
+        the_deal[2].place = 3;
+      } else{
+        the_deal[1].place = 3;
+        the_deal[2].place = 2;
+      }
+    } else if(the_deal[0].highRank > the_deal[1].highRank && the_deal[0].highRank < the_deal[2].highRank){ //player1 gets 2nd place
+      the_deal[0].place = 2;
+      if(the_deal[1].highRank > the_deal[2].highcard){
+        the_deal[1].place = 1;
+        the_deal[2].place = 3;
+      } else{
+        the_deal[1].place = 3;
+        the_deal[2].place = 1;
+      }
+    } else if(the_deal[0].highRank < the_deal[1].highRank && the_deal[0].highRank < the_deal[2].highRank){ // player1 gets 3rd place
+      the_deal[0].place = 3;
+      if(the_deal[1].highRank > the_deal[2].highcard){
+        the_deal[1].place = 1;
+        the_deal[2].place = 2;
+      } else{
+        the_deal[1].place = 2;
+        the_deal[2].place = 1;
+      }
+    } else{
+      console.log("something fishy is going on here");
+    }
+
+    console.log("***************");
+    console.log(the_deal[0].person.handle + " " + the_deal[0].place);
+    console.log(the_deal[1].person.handle + " " + the_deal[1].place);
+    console.log(the_deal[2].person.handle + " " + the_deal[2].place);
+
+
+ //   player.place = place;    
+
+  
   //use values of players' hands to figure out their placement (1,2,3)
   //Tricky part is ties on hand value, e.g., slim and pete both have 1kind.
   //Then have to invoke tie-breaker rules (see top of file). Challenging problem!
-  }
+}
+
+
+
 
 function kickerSequence( player1, player2 ){
 
