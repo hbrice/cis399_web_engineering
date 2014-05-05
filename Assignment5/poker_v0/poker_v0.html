@@ -109,9 +109,9 @@
 		//		$('#' + person).
 
 			//	person.hand = {"rank": rank, "suit": suit};
-				var hand = [];
-				hand.push({"rank": rank, "suit": suit});
-				console.log(JSON.stringify(hand, null, 4));
+			//	var hand = [];
+			//	hand.push({"rank": rank, "suit": suit});
+		//		console.log(JSON.stringify(hand, null, 4));
 				$('#' + person).append(rank + " of " + suit).append("<br>");
 		//		return hand;
 			});
@@ -131,9 +131,9 @@
                 the_deal.forEach(
                     function( player ){
                       var name = player.person.handle;
+                  //    console("name: " + name);
                        var $all_cards = $(player.hand);
                      //  console.log ( $all_cards );
-
                        //$hand = [{rank: "two", suit: "clubs"}, {...}. etc.] - an array of five card objects
                        var $hand = $all_cards.map(
                           function (i, card){         //jquery map has args reversed - sigh
@@ -146,19 +146,32 @@
                                return obj;
                           });
                        player.hand = $.makeArray( $hand );    //now have simple array
-                    });  //end forEach
+                    });  
+                    //end forEach
 
                 //compute value of each hand and its place (first, second, third)
 
                 //Put the hand value into each player's result div and place in rank div
+
+
                 the_deal.forEach(
                     function( player ){
                        var name = player.person.handle;
-                       var $result = $("#result-container .my-person-container .my-result-container"); //** find the result div to place value in
+               //        var temp = player.place;
+                    //   var value = player.value;
+               //        console.log("place: " + temp);
+               		   var value = player.value;
+               		   console.log("value: " + value);
+
+               		   var placed = player.place;
+               		   console.log("placed: " + placed);
+
+
+                       var $result = $("#result-container .my-person-container #" + name + "_result"); //** find the result div to place value in
                        $result.text( "" );       //clear it for the heck of it
                        $result.text( player.value );    //put the hand value in
 
-                       var $place = $("#result-container .my-person-container .my-rank-container"); //** find the rank div to place value in
+                       var $place = $("#result-container .my-person-container #" + name + "_rank"); //** find the rank div to place value in
                        $place.text( "" );                        //clear it for the heck of it
                        $place.text( player.place );              //put the player's place in
                     });

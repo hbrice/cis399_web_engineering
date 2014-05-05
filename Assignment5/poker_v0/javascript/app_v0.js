@@ -82,9 +82,9 @@ var pete_hand=[
   // { "rank":"ace", "suit":"spades" }
 ];
 
-var the_deal = [ {"person": slim, "hand": slim_hand, "counts": null, "value": null, "place": 0, "highcard": null},   //e.g., counts = {"two": 3, "five": 1, "jack": 1}
-                 {"person": annie, "hand": annie_hand, "counts": null, "value": null, "place": 0, "highcard": null}, //e.g., place = 1,2,3. Ties have same number.
-                 {"person": pete, "hand": pete_hand, "counts": null, "value": null, "place": 0, "highcard": null}     //e.g., value = 1kind, pair, straight, etc.
+var the_deal = [ {"person": slim, "hand": slim_hand, "counts": null, "value": "1kind", "place": 3, "highcard": null},   //e.g., counts = {"two": 3, "five": 1, "jack": 1}
+                 {"person": annie, "hand": annie_hand, "counts": null, "value": "pair", "place": 2, "highcard": null}, //e.g., place = 1,2,3. Ties have same number.
+                 {"person": pete, "hand": pete_hand, "counts": null, "value": "fullhouse", "place": 1, "highcard": null}     //e.g., value = 1kind, pair, straight, etc.
                 ];
 
 
