@@ -87,7 +87,7 @@ var the_deal = [ {"person": slim, "hand": slim_hand, "counts": null, "value": "1
                  {"person": pete, "hand": pete_hand, "counts": null, "value": "fullhouse", "place": 1, "highcard": null}     //e.g., value = 1kind, pair, straight, etc.
                 ];
 
-
+//DONE!
 function computeCounts(){
   the_deal.forEach( function ( player, i ){
     var ranks = player.hand.map( function ( card_obj ){ //takes an array player.hand and returns a new array player.hand.rank
@@ -107,7 +107,7 @@ function computeCounts(){
   });
 }
 
-
+//DONE!
 function largestRank( rank_array ){ //e.g., rank_array = ["two", "king", "nine", ...]
     //return largest rank in array, e.g., "king"
      return rank_array.reduce (function (high, cur){
@@ -115,12 +115,14 @@ function largestRank( rank_array ){ //e.g., rank_array = ["two", "king", "nine",
      }, "two");
 }
 
+//DONE!
 function smallestRank( rank_array ){
       return rank_array.reduce (function (low, cur){
         if( rank_to_number[cur] < rank_to_number[low] ) return cur; else return low;
        }, "ace");
 }
 
+//DONE!
 function exactlyK( counter_obj, k ){  //e.g., counter_obj = {"two": 1, "ace": 3, "nine": 1}, k = 3 => ["ace"]. if k = 2 => []. k = 1 => ["two", "nine"]
   //return array of ranks that appear k times in hand
   return Object.keys( counter_obj ).filter (function ( rank ) { //filter takes in an array and returns true or false; if true - map object is copied to new array we're buliding.
@@ -128,6 +130,7 @@ function exactlyK( counter_obj, k ){  //e.g., counter_obj = {"two": 1, "ace": 3,
   });
 }
 
+//DONE!
 function computeGroup( player ){
   var counts = player.counts; //e.g. {"two": 1, "ace": 3, "nine": 1}
   if ( exactlyK( counts, 4).length){
@@ -144,12 +147,14 @@ function computeGroup( player ){
   //return 4kind, 3kind, 2pair, pair, 1kind as appropriate (always highest possible)
 }
 
+//DONE!
 function isFullHouse( player ){
   //return true if player holds full-house
     var counts = player.counts; //e.g. {"two": 1, "ace": 3, "nine": 1}
     return ( exactlyK( counts, 3).length && exactlyK(counts, 2).length);
 }
 
+//DONE!
 function isStraight( player ){
       //return true for both normal straight and special ace-low straight
     var counts = player.counts; //e.g. {"two": 1, "ace": 3, "nine": 1}
@@ -164,6 +169,7 @@ function isStraight( player ){
     return ( (math == 5 || math == 13) && computeGroup(player)==="1kind");
 }
 
+//DONE!
 function isFlush( player ){
     //return true if all suits the same
     var suits = [];
@@ -177,6 +183,7 @@ function isFlush( player ){
     });
 }
 
+//DONE!
 function isStraightFlush( player ){
     return ( isFlush(player) && isStraight(player) );
 }
@@ -214,7 +221,7 @@ function computeValues(){
         //check to see if 2 pair 
         value = "pair";           //2pair pair ---still need
       } else {
-        value = "1pair";
+        value = "1kind";
       }
       console.log("Value: " + value);
       player.value = value;
@@ -226,8 +233,8 @@ function computeValues(){
 function computePlaces(){
   the_deal.forEach( function ( player, i ){
     var place = 0;
-    
-
+    var name = player.person.handle;
+    // check their value and compare
 
     player.place = place;
   });
