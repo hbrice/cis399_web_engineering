@@ -210,7 +210,8 @@ function computeValues(){
         value = "straight";       //straight
       } else if(test2 == "3kind"){
         value = "3kind";          //3 of a kind 
-      } else if(test2 == "2 kind"){
+      } else if(test2 == "2kind"){
+        //check to see if 2 pair 
         value = "pair";           //2pair pair ---still need
       } else {
         value = "1pair";
