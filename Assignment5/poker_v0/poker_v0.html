@@ -110,26 +110,34 @@
 				var rank = $("#rank-select").val();
 				console.log( rank );
 
-				var array = person + "Ctr";
-			//	console.log("array: " + array);
+				//card object to push into array
+				var card = {};
+				card.rank = rank;
+				card.suit = suit;
+
+				var array = person + "Ctr";	//not really an array..
 				if(array == "slimCtr" && slimCtr < 5){
 					slimCtr++;
+					slim_hand.push(card);
 					$('#' + person).append(rank + " of " + suit).append("<br>");
 				} else if(array == "peteCtr" && peteCtr < 5){
 					peteCtr++;
+					pete_hand.push(card);
 					$('#' + person).append(rank + " of " + suit).append("<br>");
 				} else if(array == "annieCtr" && annieCtr < 5){
 					annieCtr++;
+					annie_hand.push(card);
 					$('#' + person).append(rank + " of " + suit).append("<br>");
 				} else{
 					console.log("ERROR: Can't add to hand.");
 				}
-				// add the selected card to the selected person's hand
-	//			var name = the_deal.person.handle;
-	//			console.log(name);
 
+			console.log("slim_hand: " + JSON.stringify(slim_hand));
+			console.log("annie_hand: " + JSON.stringify(annie_hand));
+			console.log("pete_hand: " + JSON.stringify(pete_hand));
 
 			});
+			
 
 			// RESET THE CONTAINER FOR THE PERSON CLICKED --DONE :D
 			$("button.reset_btn").click(function(event){
@@ -139,15 +147,27 @@
 				var nameCtr = idname + "Ctr";	//for resetting the ctr
 				if(nameCtr == "slimCtr"){
 					slimCtr = 0;
+					// while(slim_hand.length > 0){ //remove cards from array
+					// 	slim_hand.pop;
+					// }
 				} else if(nameCtr == "peteCtr"){
 					peteCtr = 0;
+					// while(pete_hand.length > 0){ //remove cards from array
+					// 	pete_hand.pop;
+					// }
 				} else if(nameCtr == "annieCtr"){
 					annieCtr = 0;
+					// while(annie_hand.length > 0){ //remove cards from array
+					// 	annie_hand.pop;
+					// }
 				} else{
 					console.log("ERROR: Can't reset hand to zero.");
 				}
 				$("#hands-container  .my-person-container #" + idname).empty();
 				console.log('RESET');
+				console.log("slim_hand: " + JSON.stringify(slim_hand));
+				console.log("annie_hand: " + JSON.stringify(annie_hand));
+				console.log("pete_hand: " + JSON.stringify(pete_hand));
 			});
 
 			$("button#winner").click(function(event){

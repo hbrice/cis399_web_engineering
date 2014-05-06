@@ -59,27 +59,27 @@ var pete = {"handle": "pete",
             "winnings": 0};
 
 var slim_hand=[
-  { "rank":"two", "suit":"spades" },
-  { "rank":"ace", "suit":"spades" },
-  { "rank":"three", "suit":"spades" },
-  { "rank":"four", "suit":"diamonds" },
-  { "rank":"five", "suit":"spades"}
+  // { "rank":"two", "suit":"spades" },
+  // { "rank":"ace", "suit":"spades" },
+  // { "rank":"three", "suit":"spades" },
+  // { "rank":"four", "suit":"diamonds" },
+  // { "rank":"five", "suit":"spades"}
 ]; 
 
 var annie_hand=[
-  { "rank":"four", "suit":"hearts" },
-  { "rank":"three", "suit":"hearts" },
-  { "rank":"six", "suit":"hearts" },
-  { "rank":"king", "suit":"hearts" },
-  { "rank":"ace", "suit":"hearts" }
+  // { "rank":"four", "suit":"hearts" },
+  // { "rank":"three", "suit":"hearts" },
+  // { "rank":"six", "suit":"hearts" },
+  // { "rank":"king", "suit":"hearts" },
+  // { "rank":"ace", "suit":"hearts" }
 ];
 
 var pete_hand=[
-  { "rank":"ten", "suit":"clubs" },
-  { "rank":"jack", "suit":"spades" },
-  { "rank":"queen", "suit":"spades" },
-  { "rank":"king", "suit":"clubs" },
-  { "rank":"ace", "suit":"spades" }
+  // { "rank":"ten", "suit":"clubs" },
+  // { "rank":"jack", "suit":"spades" },
+  // { "rank":"queen", "suit":"spades" },
+  // { "rank":"king", "suit":"clubs" },
+  // { "rank":"ace", "suit":"spades" }
 ];
 
 //*** testing functions in this file-- use this "the_deal"
@@ -248,7 +248,6 @@ function computePlaces(){
     var name = player.person.handle;
     // check their value and compare
     var value = player.value; // (ie. pair)
-    console.log("value: " + value);
     var j = 0;  // value of player
     var arrayLen = poker_hands.length;
     
@@ -260,14 +259,11 @@ function computePlaces(){
     }
     //assign highRank to the player.. farther in the array is higher the rank (ie. 9) -- this is a number
     if( name == "slim"){
-      player.highRank = j
-      console.log("slim's highRank: " + player.highRank);
+      player.highRank = j;
     } else if( name == "pete"){
-      player.highRank = j
-      console.log("pete's highRank: " + player.highRank);
+      player.highRank = j;
     } else if( name == "annie"){
-      player.highRank = j
-      console.log("annie's highRank: " + player.highRank);
+      player.highRank = j;
     } else {
       console.log("ERROR: in ComputerPlaces()");
     }
@@ -423,7 +419,7 @@ function computePlaces(){
         the_deal[2].place = 1;
       }
     } else{
-      console.log("something fishy is going on here");
+      console.log("something fishy is going on here"); //should never print this
     }
 
     console.log("***************");
@@ -436,9 +432,7 @@ function computePlaces(){
   //Then have to invoke tie-breaker rules (see top of file). Challenging problem!
 }
 
-
-
-
+//DONE!
 function kickerSequence( player1, player2 ){
   console.log("entered kicker");
     //for 1kind and flush ties, sort ranks and compare one by one.
