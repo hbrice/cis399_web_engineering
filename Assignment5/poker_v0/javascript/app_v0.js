@@ -279,38 +279,88 @@ function computePlaces(){
 
       //compare the two players in case of a tie
     if(the_deal[0].highRank == the_deal[1].highRank){  
-      console.log("entered here.");
       winner = kickerSequence(the_deal[0], the_deal[1]);
-
-      if(the_deal[0].highRank > the_deal[2]){
-        the_deal[2].place = 3;
-        if(winner == "player1"){
-          the_deal[0].place = 1;
-          the_deal[1].place = 2;
-        } else if(winner == "player2") {
-          the_deal[0].place = 2;
-          the_deal[1].place = 1;
-        } else{
-          console.log("True tie");
+      console.log("and the winner is: " + winner);
+      if(winner != null){
+        console.log("inside if")
+          if(the_deal[0].highRank > the_deal[2].highRank){ 
+            the_deal[2].place = 3;
+            if(winner == "player1"){
+              the_deal[0].place = 1;
+              the_deal[1].place = 2;
+            } else if(winner == "player2") {
+              the_deal[0].place = 2;
+              the_deal[1].place = 1;
+            } else{
+              console.log("True tie");
+            }
+          } else{
+            the_deal[2].place = 1;
+            if(winner == "player1"){
+              the_deal[0].place = 2;
+              the_deal[1].place = 3;
+            } else if(winner == "player2") {
+              the_deal[0].place = 3;
+              the_deal[1].place = 2;
+            } else{
+              console.log("True tie");
+            }
+          }
         }
-      } else{
-        the_deal[2].place = 1;
-        if(winner == "player1"){
-          the_deal[0].place = 2;
-          the_deal[1].place = 3;
-        } else if(winner == "player2") {
-          the_deal[0].place = 3;
-          the_deal[1].place = 2;
-        } else{
-          console.log("True tie");
-        }
-      }
-
-
     } else if(the_deal[0].highRank == the_deal[2].highRank){
       winner = kickerSequence(the_deal[0], the_deal[2]);
+      if(winner != null){
+          if(the_deal[0].highRank > the_deal[1]){
+            the_deal[1].place = 3;
+            if(winner == "player1"){
+              the_deal[0].place = 1;
+              the_deal[2].place = 2;
+            } else if(winner == "player2") {
+              the_deal[0].place = 2;
+              the_deal[2].place = 1;
+            } else{
+              console.log("True tie");
+            }
+          } else{
+            the_deal[1].place = 1;
+            if(winner == "player1"){
+              the_deal[0].place = 2;
+              the_deal[2].place = 3;
+            } else if(winner == "player2") {
+              the_deal[0].place = 3;
+              the_deal[2].place = 2;
+            } else{
+              console.log("True tie");
+            }
+          }
+        }
     } else if(the_deal[1].highRank == the_deal[2].highRank){
       winner = kickerSequence(the_deal[1], the_deal[2]);
+      if(winner != null){
+          if(the_deal[1].highRank > the_deal[0]){
+            the_deal[0].place = 3;
+            if(winner == "player1"){
+              the_deal[1].place = 1;
+              the_deal[2].place = 2;
+            } else if(winner == "player2") {
+              the_deal[1].place = 2;
+              the_deal[2].place = 1;
+            } else{
+              console.log("True tie");
+            }
+          } else{
+            the_deal[0].place = 1;
+            if(winner == "player1"){
+              the_deal[1].place = 2;
+              the_deal[2].place = 3;
+            } else if(winner == "player2") {
+              the_deal[1].place = 3;
+              the_deal[2].place = 2;
+            } else{
+              console.log("True tie");
+            }
+          }
+        }
 
 
       //END OF TIES
@@ -362,13 +412,9 @@ function kickerSequence( player1, player2 ){
   console.log("entered kicker");
     //for 1kind and flush ties, sort ranks and compare one by one.
     //return winning player or null if true tie
-    var winner;
-    
+
     var p1 = player1.highcard;  // highest card in hand
     var p1val = player1.value; //type fullhouse
-
-    console.log("player1: " + p1, p1val);
-    var group1 = computeGroup(player1);
 
     var p1counts = player1.counts; //e.g. {"two": 1, "ace": 3, "nine": 1}
     var p2counts = player2.counts;
@@ -380,74 +426,84 @@ function kickerSequence( player1, player2 ){
     var t1, t2; // player 1
     var q1, q2; // player 2
 
+    var array1 = [];
+    var array2 = [];
+    var arr1 = [];
+    var arr2 = [];
+    var arr3 = [];
+    var arr4 = [];
+
   // BEGIN FULL HOUSE: compare 3 of a kind then 2 of a kind
-      $.each(p1counts, function(key, value) {
-   //     console.log(key, value);
-        if (value == 3){
-          t1 = rank_to_number[key];
-   //       console.log("t1: " + t1);
-        }
-        if (value == 2){
-          t2 = rank_to_number[key];
-        }
-      });
+    if(p1val == "fullhouse"){
+        $.each(p1counts, function(key, value) {
+     //     console.log(key, value);
+          if (value == 3){
+            t1 = rank_to_number[key];
+          }
+          if (value == 2){
+            t2 = rank_to_number[key];
+          }
+        });
 
-      $.each(p2counts, function(key, value) {
-   //     console.log(key, value);
-        if (value == 3){
-          q1 = rank_to_number[key];
-        }
-        if (value == 2){
-          q2 = rank_to_number[key];
-        }
-      });
+        $.each(p2counts, function(key, value) {
+     //     console.log(key, value);
+          if (value == 3){
+            q1 = rank_to_number[key];
+          }
+          if (value == 2){
+            q2 = rank_to_number[key];
+          }
+        });
 
-      if(t1 > q1){
-        return "player1";
-      } else if(q1 > t1){
-        return "player2";
-      } else if(t2 > q2){
-        return "player1";
-      } else if(q2 > t2){
-        return "player2";
-      } else{
-        //continue on comparing
-      }
-      //END OF FULL HOUSE
+        if(t1 > q1){
+          return "player1";
+        } else if(q1 > t1){
+          return "player2";
+        } else if(t2 > q2){
+          return "player1";
+        } else if(q2 > t2){
+          return "player2";
+        } else{
+          //continue on comparing
+          return null;
+        }
+      }  //END OF FULL HOUSE
 
     //BEGIN check 4kind - check the 4 of a kind, then check the 1kind
-      $.each(p1counts, function(key, value) {
-   //     console.log(key, value);
-        if (value == 4){
-          t1 = rank_to_number[key];
-        }
-        if (value == 1){
-          t2 = rank_to_number[key];
-        }
-      });
+      if(p1val == "4kind"){
+          $.each(p1counts, function(key, value) {
+       //     console.log(key, value);
+            if (value == 4){
+              t1 = rank_to_number[key];
+            }
+            if (value == 1){
+              t2 = rank_to_number[key];
+            }
+          });
 
-      $.each(p2counts, function(key, value) {
-    //    console.log(key, value);
-        if (value == 4){
-          q1 = rank_to_number[key];
-        }
-        if (value == 1){
-          q2 = rank_to_number[key];
-        }
-      });
+          $.each(p2counts, function(key, value) {
+        //    console.log(key, value);
+            if (value == 4){
+              q1 = rank_to_number[key];
+            }
+            if (value == 1){
+              q2 = rank_to_number[key];
+            }
+          });
 
-      if(t1 > q1){
-        return "player1";
-      } else if(q1 > t1){
-        return "player2";
-      } else if(t2 > q2){
-        return "player1";
-      } else if(q2 > t2){
-        return "player2";
-      } else{
-        //continue on comparing
-      }
-      //END 4KIND
+          if(t1 > q1){
+            return "player1";
+          } else if(q1 > t1){
+            return "player2";
+          } else if(t2 > q2){
+            return "player1";
+          } else if(q2 > t2){
+            return "player2";
+          } else{
+            //continue on comparing
+            return null;
+          }
+      } //END 4KIND
 
       //Start Straight & straight flush compare
       if(p1val == "straight" || p1val == "straightflush"){
@@ -463,19 +519,62 @@ function kickerSequence( player1, player2 ){
       }
       //END Straight & straight flush
 
+      // START 2pair compare
+      if(p1val == "2pair"){
+        $.each(p1counts, function(key, value) {
+   //     console.log(key, value);
+          if (value == 2){
+            t1 = rank_to_number[key];
+            arr1.push(t1);
+          }
+          if (value == 1){
+            t2 = rank_to_number[key];
+            arr2.push(t2);
+          }
+        });
 
-      
-      
-      //Start flush compare and 1kind
-      var array1 = [];
-      var array2 = [];
+        $.each(p2counts, function(key, value) {
+   //     console.log(key, value);
+          if (value == 2){
+            q1 = rank_to_number[key];
+            arr3.push(t1);
+          }
+          if (value == 1){
+            q2 = rank_to_number[key];
+            arr4.push(t2);
+          }
+        });
+
+        arr1.sort(function( a,b ){return b-a});
+        arr3.sort(function( a,b ){return b-a});
+
+        if(arr1[0] > arr3[0]){
+          return "player1";
+        } else if(arr1[0] < arr3[0]){
+          return "player2";
+        } else if(arr1[1] > arr3[1]){
+          return "player1";
+        } else if(arr1[1] < arr3[1]){
+          return "player2";
+        } else if(arr2[0] > arr4[0]){
+          return "player1";
+        } else if(arr2[0] < arr4[0]){
+          return "player2";
+        } else {
+          //2 pair tie: with same last card
+          return null; 
+        }
+      } // END 2PAIR
+
+      //Start flush compare and 1kind  
+      console.log("about to enter flush");
 
       if(p1val == "flush" || p1val =="1kind"){
+        console.log("entered");
         $.each(p1counts, function(key, value) {
           t1 = rank_to_number[key];
           array1.push(t1)
         });
-        array1.sort(function( a,b ){return b-a});
 
         $.each(p2counts, function(key, value) {
           q1 = rank_to_number[key];
@@ -484,12 +583,8 @@ function kickerSequence( player1, player2 ){
         //create sorted arrays
         array1.sort(function( a,b ){return b-a});
         array2.sort(function (a,b) {return b-a});
-      }
-      console.log("array1: " + array1);
-      console.log("array2: " + array2);
-      console.log("------------------");
-
-      for(var l = 0; l < array1.length; l++){
+      
+        for(var l = 0; l < array1.length; l++){
         t1 = array1[l];
         q1 = array2[l];
         if(t1 > q1){
@@ -502,6 +597,8 @@ function kickerSequence( player1, player2 ){
       } //end of for loop
       return null; // true flush tie
       //END flush and 1kind
+
+      }
 }
 
 
