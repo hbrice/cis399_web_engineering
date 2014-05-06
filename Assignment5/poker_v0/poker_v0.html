@@ -132,9 +132,9 @@
 					console.log("ERROR: Can't add to hand.");
 				}
 
-			console.log("slim_hand: " + JSON.stringify(slim_hand));
-			console.log("annie_hand: " + JSON.stringify(annie_hand));
-			console.log("pete_hand: " + JSON.stringify(pete_hand));
+	//		console.log("slim_hand: " + JSON.stringify(slim_hand));
+	//		console.log("annie_hand: " + JSON.stringify(annie_hand));
+	//		console.log("pete_hand: " + JSON.stringify(pete_hand));
 
 			});
 			
@@ -174,35 +174,28 @@
 					the_deal.forEach(
                     function( player ){
                       var name = player.person.handle;
-                  //    console("name: " + name);
                        var $all_cards = $(player.hand);
-                     //  console.log ( $all_cards );
                        //$hand = [{rank: "two", suit: "clubs"}, {...}. etc.] - an array of five card objects
-                       var $hand = $all_cards.map(
-                          function (i, card){         //jquery map has args reversed - sigh
-                               var $card = $(card);   //jquery map unwraps arg - need to wrap it again
-                               var obj = {};
-                               obj.rank = $card.rank;
-//                               console.log(obj.rank);
-                               obj.suit = $card.suit;
-//                               console.log(obj.suit);
-                               return obj;
+                       var $hand = $all_cards.map( function (i, card) {         //jquery map has args reversed - sigh
+                           var $card = $(card);   //jquery map unwraps arg - need to wrap it again
+                           var obj = {};
+                           obj.rank = $card[0].rank;
+                           obj.suit = $card[0].suit;
+                           return obj;
                           });
                        player.hand = $.makeArray( $hand );    //now have simple array
                     });  
                     //end forEach
+                    computeCounts();
+                    computeValues();
+                    computePlaces();
 
                 //compute value of each hand and its place (first, second, third)
-
                 //Put the hand value into each player's result div and place in rank div
-
 
                 the_deal.forEach(
                     function( player ){
                        var name = player.person.handle;
-               //        var temp = player.place;
-                    //   var value = player.value;
-               //        console.log("place: " + temp);
                		   var value = player.value;
                		   console.log("value: " + value);
 
