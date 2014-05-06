@@ -59,27 +59,27 @@ var pete = {"handle": "pete",
             "winnings": 0};
 
 var slim_hand=[
-  { "rank":"two", "suit":"spades" },
+  { "rank":"four", "suit":"spades" },
   { "rank":"three", "suit":"spades" },
-  { "rank":"two", "suit":"spades" },
-  { "rank":"three", "suit":"hearts" },
-  { "rank":"three", "suit":"spades"}
+  { "rank":"nine", "suit":"spades" },
+  { "rank":"king", "suit":"spades" },
+  { "rank":"ace", "suit":"spades"}
 ]; 
 
 var annie_hand=[
-  { "rank":"two", "suit":"hearts" },
-  { "rank":"four", "suit":"clubs" },
-  { "rank":"four", "suit":"spades" },
-  { "rank":"two", "suit":"hearts" },
-  { "rank":"four", "suit":"spades" }
+  { "rank":"four", "suit":"hearts" },
+  { "rank":"three", "suit":"hearts" },
+  { "rank":"six", "suit":"hearts" },
+  { "rank":"king", "suit":"hearts" },
+  { "rank":"ace", "suit":"hearts" }
 ];
 
 var pete_hand=[
-  { "rank":"two", "suit":"spades" },
-  { "rank":"three", "suit":"spades" },
+  { "rank":"two", "suit":"clubs" },
+  { "rank":"seven", "suit":"spades" },
   { "rank":"four", "suit":"spades" },
-  { "rank":"five", "suit":"spades" },
-  { "rank":"ace", "suit":"spades" }
+  { "rank":"five", "suit":"clubs" },
+  { "rank":"king", "suit":"spades" }
 ];
 
 //*** testing functions in this file-- use this "the_deal"
@@ -369,11 +369,8 @@ function kickerSequence( player1, player2 ){
 
     console.log("player1: " + p1, p1val);
     var group1 = computeGroup(player1);
-    console.log(group1); //3kind
-
 
     var p1counts = player1.counts; //e.g. {"two": 1, "ace": 3, "nine": 1}
-    console.log(p1counts);
     var p2counts = player2.counts;
     
     var p2 = player2.highcard;
@@ -383,24 +380,25 @@ function kickerSequence( player1, player2 ){
     var t1, t2; // player 1
     var q1, q2; // player 2
 
-  // BEGIN FULL HOUSE, compare 3 of a kind then 2 of a kind
+  // BEGIN FULL HOUSE: compare 3 of a kind then 2 of a kind
       $.each(p1counts, function(key, value) {
-        console.log(key, value);
+   //     console.log(key, value);
         if (value == 3){
-          t1 = key;
+          t1 = rank_to_number[key];
+   //       console.log("t1: " + t1);
         }
         if (value == 2){
-          t2 = key;
+          t2 = rank_to_number[key];
         }
       });
 
       $.each(p2counts, function(key, value) {
-        console.log(key, value);
+   //     console.log(key, value);
         if (value == 3){
-          q1 = key;
+          q1 = rank_to_number[key];
         }
         if (value == 2){
-          q2 = key;
+          q2 = rank_to_number[key];
         }
       });
 
@@ -415,22 +413,95 @@ function kickerSequence( player1, player2 ){
       } else{
         //continue on comparing
       }
-
       //END OF FULL HOUSE
 
+    //BEGIN check 4kind - check the 4 of a kind, then check the 1kind
+      $.each(p1counts, function(key, value) {
+   //     console.log(key, value);
+        if (value == 4){
+          t1 = rank_to_number[key];
+        }
+        if (value == 1){
+          t2 = rank_to_number[key];
+        }
+      });
+
+      $.each(p2counts, function(key, value) {
+    //    console.log(key, value);
+        if (value == 4){
+          q1 = rank_to_number[key];
+        }
+        if (value == 1){
+          q2 = rank_to_number[key];
+        }
+      });
+
+      if(t1 > q1){
+        return "player1";
+      } else if(q1 > t1){
+        return "player2";
+      } else if(t2 > q2){
+        return "player1";
+      } else if(q2 > t2){
+        return "player2";
+      } else{
+        //continue on comparing
+      }
+      //END 4KIND
+
+      //Start Straight & straight flush compare
+      if(p1val == "straight" || p1val == "straightflush"){
+        if(p1 > p2){
+          return "player1";
+        } else if( p2 > p1){
+          return "player2";
+        } else { //p1 == p2
+          return null; // they had a tied straight - return null
+        } 
+      } else {
+        //continue on comparing
+      }
+      //END Straight & straight flush
 
 
+      
+      
+      //Start flush compare and 1kind
+      var array1 = [];
+      var array2 = [];
 
-    console.log("player2: " + p2, p2val);
-    if(p1 > p2){
-      return "player1";
-    } else if( p2 > p1){
-      return "player2";
-    } else if( p1 == p2 ){
-      console.log("they tied in the kicker");
-    } else{
-      console.log("lalala");
-    }
+      if(p1val == "flush" || p1val =="1kind"){
+        $.each(p1counts, function(key, value) {
+          t1 = rank_to_number[key];
+          array1.push(t1)
+        });
+        array1.sort(function( a,b ){return b-a});
+
+        $.each(p2counts, function(key, value) {
+          q1 = rank_to_number[key];
+          array2.push(q1)
+        }); 
+        //create sorted arrays
+        array1.sort(function( a,b ){return b-a});
+        array2.sort(function (a,b) {return b-a});
+      }
+      console.log("array1: " + array1);
+      console.log("array2: " + array2);
+      console.log("------------------");
+
+      for(var l = 0; l < array1.length; l++){
+        t1 = array1[l];
+        q1 = array2[l];
+        if(t1 > q1){
+          return "player1";
+        } else if(q1 > t1){
+          return "player2";
+        } else{
+          //tie continue continue looping
+        }
+      } //end of for loop
+      return null; // true flush tie
+      //END flush and 1kind
 }
 
 
