@@ -59,11 +59,11 @@ var pete = {"handle": "pete",
             "winnings": 0};
 
 var slim_hand=[
-  { "rank":"four", "suit":"spades" },
+  { "rank":"two", "suit":"spades" },
+  { "rank":"ace", "suit":"spades" },
   { "rank":"three", "suit":"spades" },
-  { "rank":"nine", "suit":"spades" },
-  { "rank":"king", "suit":"spades" },
-  { "rank":"ace", "suit":"spades"}
+  { "rank":"four", "suit":"diamonds" },
+  { "rank":"five", "suit":"spades"}
 ]; 
 
 var annie_hand=[
@@ -75,11 +75,11 @@ var annie_hand=[
 ];
 
 var pete_hand=[
-  { "rank":"two", "suit":"clubs" },
-  { "rank":"seven", "suit":"spades" },
-  { "rank":"four", "suit":"spades" },
-  { "rank":"five", "suit":"clubs" },
-  { "rank":"king", "suit":"spades" }
+  { "rank":"ten", "suit":"clubs" },
+  { "rank":"jack", "suit":"spades" },
+  { "rank":"queen", "suit":"spades" },
+  { "rank":"king", "suit":"clubs" },
+  { "rank":"ace", "suit":"spades" }
 ];
 
 //*** testing functions in this file-- use this "the_deal"
@@ -306,7 +306,18 @@ function computePlaces(){
               console.log("True tie");
             }
           }
-        }
+        } else { //winner is null
+          console.log("TRUE TIE. Both players are the same rank");
+          if(the_deal[0].highRank > the_deal[2]){
+            the_deal[2].place = 2;
+            the_deal[0].place = 1;
+            the_deal[1].place = 1;
+           } else{
+            the_deal[2].place = 1;
+            the_deal[0].place = 2;
+            the_deal[1].place = 2;
+           }
+         }
     } else if(the_deal[0].highRank == the_deal[2].highRank){
       winner = kickerSequence(the_deal[0], the_deal[2]);
       if(winner != null){
@@ -333,7 +344,18 @@ function computePlaces(){
               console.log("True tie");
             }
           }
-        }
+        } else { //winner is null
+          console.log("TRUE TIE. Both players are the same rank");
+          if(the_deal[0].highRank > the_deal[1]){
+            the_deal[1].place = 2;
+            the_deal[0].place = 1;
+            the_deal[2].place = 1;
+           } else{
+            the_deal[1].place = 1;
+            the_deal[0].place = 2;
+            the_deal[2].place = 2;
+           }
+         }
     } else if(the_deal[1].highRank == the_deal[2].highRank){
       winner = kickerSequence(the_deal[1], the_deal[2]);
       if(winner != null){
@@ -360,9 +382,18 @@ function computePlaces(){
               console.log("True tie");
             }
           }
+        } else { //winner is null
+          console.log("TRUE TIE. Both players are the same rank");
+          if(the_deal[1].highRank > the_deal[0]){
+            the_deal[0].place = 2;
+            the_deal[1].place = 1;
+            the_deal[2].place = 1;
+           } else{
+            the_deal[0].place = 1;
+            the_deal[1].place = 2;
+            the_deal[2].place = 2;
+           } 
         }
-
-
       //END OF TIES
     } else if (the_deal[0].highRank > the_deal[1].highRank && the_deal[0].highRank > the_deal[2].highRank){ // player1 gets 1st place
       the_deal[0].place = 1;
@@ -413,19 +444,20 @@ function kickerSequence( player1, player2 ){
     //for 1kind and flush ties, sort ranks and compare one by one.
     //return winning player or null if true tie
 
-    var p1 = player1.highcard;  // highest card in hand
+    var p1 = player1.highcard;  // highest card in player1's hand
+    var p2 = player2.highcard;  // highest card in player2's hand
+
     var p1val = player1.value; //type fullhouse
 
     var p1counts = player1.counts; //e.g. {"two": 1, "ace": 3, "nine": 1}
     var p2counts = player2.counts;
     
-    var p2 = player2.highcard;
-    var p2val = player2.value;
 
     //temp variables
     var t1, t2; // player 1
     var q1, q2; // player 2
 
+    //temp arrays for sorting ranks
     var array1 = [];
     var array2 = [];
     var arr1 = [];
@@ -436,7 +468,6 @@ function kickerSequence( player1, player2 ){
   // BEGIN FULL HOUSE: compare 3 of a kind then 2 of a kind
     if(p1val == "fullhouse"){
         $.each(p1counts, function(key, value) {
-     //     console.log(key, value);
           if (value == 3){
             t1 = rank_to_number[key];
           }
@@ -446,7 +477,6 @@ function kickerSequence( player1, player2 ){
         });
 
         $.each(p2counts, function(key, value) {
-     //     console.log(key, value);
           if (value == 3){
             q1 = rank_to_number[key];
           }
@@ -464,7 +494,6 @@ function kickerSequence( player1, player2 ){
         } else if(q2 > t2){
           return "player2";
         } else{
-          //continue on comparing
           return null;
         }
       }  //END OF FULL HOUSE
@@ -472,7 +501,6 @@ function kickerSequence( player1, player2 ){
     //BEGIN check 4kind - check the 4 of a kind, then check the 1kind
       if(p1val == "4kind"){
           $.each(p1counts, function(key, value) {
-       //     console.log(key, value);
             if (value == 4){
               t1 = rank_to_number[key];
             }
@@ -482,7 +510,6 @@ function kickerSequence( player1, player2 ){
           });
 
           $.each(p2counts, function(key, value) {
-        //    console.log(key, value);
             if (value == 4){
               q1 = rank_to_number[key];
             }
@@ -522,7 +549,6 @@ function kickerSequence( player1, player2 ){
       // START 2pair compare
       if(p1val == "2pair"){
         $.each(p1counts, function(key, value) {
-   //     console.log(key, value);
           if (value == 2){
             t1 = rank_to_number[key];
             arr1.push(t1);
@@ -534,7 +560,6 @@ function kickerSequence( player1, player2 ){
         });
 
         $.each(p2counts, function(key, value) {
-   //     console.log(key, value);
           if (value == 2){
             q1 = rank_to_number[key];
             arr3.push(t1);
@@ -600,5 +625,3 @@ function kickerSequence( player1, player2 ){
 
       }
 }
-
-
