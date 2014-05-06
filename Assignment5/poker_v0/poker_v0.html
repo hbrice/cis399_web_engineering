@@ -147,19 +147,13 @@
 				var nameCtr = idname + "Ctr";	//for resetting the ctr
 				if(nameCtr == "slimCtr"){
 					slimCtr = 0;
-					// while(slim_hand.length > 0){ //remove cards from array
-					// 	slim_hand.pop;
-					// }
+					slim_hand.length = 0;
 				} else if(nameCtr == "peteCtr"){
 					peteCtr = 0;
-					// while(pete_hand.length > 0){ //remove cards from array
-					// 	pete_hand.pop;
-					// }
+					pete_hand.length = 0;
 				} else if(nameCtr == "annieCtr"){
 					annieCtr = 0;
-					// while(annie_hand.length > 0){ //remove cards from array
-					// 	annie_hand.pop;
-					// }
+					annie_hand.length = 0;
 				} else{
 					console.log("ERROR: Can't reset hand to zero.");
 				}
