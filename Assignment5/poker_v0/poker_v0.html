@@ -148,6 +148,7 @@
 				if(nameCtr == "slimCtr"){
 					slimCtr = 0;
 					slim_hand.length = 0;
+					console.log("slim's attr: "+ JSON.stringify(the_deal[0]));
 				} else if(nameCtr == "peteCtr"){
 					peteCtr = 0;
 					pete_hand.length = 0;
@@ -159,6 +160,17 @@
 				}
 				$("#hands-container  .my-person-container #" + idname).empty();
 				console.log('RESET');
+
+					//clear out data
+				the_deal.forEach( function( player ) {
+					player.counts = null;
+					player.value = null;
+					player.place = 0;
+					player.highcard = 0;
+					player.highRank = 0;
+				});
+				
+
 				console.log("slim_hand: " + JSON.stringify(slim_hand));
 				console.log("annie_hand: " + JSON.stringify(annie_hand));
 				console.log("pete_hand: " + JSON.stringify(pete_hand));

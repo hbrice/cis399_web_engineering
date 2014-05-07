@@ -585,6 +585,59 @@ function kickerSequence( player1, player2 ){
         }
       } // END 2PAIR
 
+      // START pair compare
+      if(p1val == "pair"){
+        arr1.length=0;
+        arr2.length=0;
+        arr3.length=0;
+        arr4.length=0;
+        $.each(p1counts, function(key, value) {
+          if (value == 2){
+            t1 = rank_to_number[key];
+            arr1.push(t1);
+          }
+          if (value == 1){
+            t2 = rank_to_number[key];
+            arr2.push(t2);
+          }
+        });
+
+        $.each(p2counts, function(key, value) {
+          if (value == 2){
+            q1 = rank_to_number[key];
+            arr3.push(t1);
+          }
+          if (value == 1){
+            q2 = rank_to_number[key];
+            arr4.push(t2);
+          }
+        });
+
+        arr2.sort(function( a,b ){return b-a});
+        arr4.sort(function( a,b ){return b-a});
+
+        if(arr1[0] > arr3[0]){
+          return "player1";
+        } else if(arr1[0] < arr3[0]){
+          return "player2";
+        } else if(arr2[0] > arr4[0]){
+          return "player1";
+        } else if(arr2[0] < arr4[0]){
+          return "player2";
+        } else if(arr2[1] > arr4[1]){
+          return "player1";
+        } else if(arr2[1] < arr4[1]){
+          return "player2";
+        } else if(arr2[2] > arr4[2]){
+          return "player1";
+        }else if(arr2[2] < arr4[2]){
+          return "player2";
+        }else {
+          //2 pair tie: with same last card
+          return null; 
+        }
+      } // END PAIR
+
       //Start flush compare and 1kind  
       console.log("about to enter flush");
 
