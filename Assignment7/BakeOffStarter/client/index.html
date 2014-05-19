@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+
+  <head>
+
+      <style>
+
+          #directions {
+                        font-size: x-large;
+                        color: red
+                      }
+
+      </style>
+
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+      <script>
+
+       function showResult(resp_body) {
+          console.log("inside showResult");
+          console.log("response body: " + JSON.stringify(resp_body));
+          if( resp_body.message === "not found"){
+            //tell user
+            console.log("Could not find match, New Entry Added!");
+          } else if (resp_body.message === "already voted"){
+            var voter = resp_body.voter;
+            $(".answer").text(voter + " has already voted once. Cannot vote again.");
+            return;
+          } 
+          var dog = resp_body.target;
+          console.log("dog = " + dog);
+          var cnt = resp_body.count;
+          console.log("count = " + cnt);
+          var fin = resp_body.finalist;
+          var voters = resp_body.voters;
+          console.log("voters = " + voters);
+          
+          //pics a message to display.
+          var mess;
+          if( fin == true){
+            mess = "and is a finalist!";
+          } else {
+            mess = "and is not a finalist.";
+          }
+          console.log("fin = "+ fin);
+          $(".answer").text("Now " + dog + " has a total of " + cnt + " votes "+ mess );
+      }; //end of cunctions
+
+      //displays the finalist
+      function showFinalist(resp_body){
+          console.log("inside showFiltered");
+          var message = resp_body.message;
+          var names = resp_body.list;
+          console.log("@@ " + JSON.stringify(names));
+          console.log(names.length);
+          var temp = [];
+          for(var i = 0; i < names.length; i++){
+            temp.push(names[i].target);
+            console.log(names[i]);
+          }
+          console.log(temp);
+          $(".answer").text("The finalist are " + message + ": " + temp);
+      }// end of function
+
+      function showFiltered(resp_body){
+          console.log("##inside showFiltered");
+          if(resp_body.list.length != null){
+
+            var message = resp_body.message;
+            var small = resp_body.list;
+            var len = small.length;
+            var inputValue = resp_body.len;
+            console.log("&&&&" + inputValue);
+
+            var temp = [];
+            temp.length = 0;
+            for(var i = 0; i < len; i++){
+              if(small[i].target.length <= inputValue){
+                temp.push(small[i].target);
+                console.log(small[i]);
+              }
+            }
+            $(".answer").text("The dogs with names less than or equal to " + inputValue + " are: "+ temp);
+            console.log("temp: "+ temp);
+          }
+      } //end of function
+
+        var main = function (){
+          console.log("inside main.");
+          $("button#mongoget").on("click", function (event){
+                console.log("button clicked.");
+                $(".answer").text("");
+                $.getJSON("mongo.json", {"target": $("#dogname").val(), "voter": $("#votername").val()},
+                                         showResult);
+          });
+
+          $("button#finalistButton").on("click", function (event){
+                $.getJSON("getFinal.json", {"finalist": true},
+                                         showFinalist);
+          });
+         
+          $("button#filterItem").on("click", function (event){
+                $.getJSON("getFilter.json", {"len": $("#filter").val()},
+                                         showFiltered);
+          });
+
+        
+        }
+        $(document).ready(main);
+      </script>
+  </head>
+
+  <body>
+
+    <h1>Dog Voter</h1>
+
+     <section id="name-input">
+        <span id="directions">Type your name: </span>
+        <input id="votername" type="string"><br>
+        <span id="directions">Type in a dog name to vote for: </span>
+        <input id="dogname" type="string">
+        <button id="mongoget">Vote this name!</button>
+        <button id="finalistButton">Show Finalist!</button><br>
+        <span id="directions">Type in a number to filter options by length: </span>
+        <input id="filter" type="string">
+        <button id="filterItem">Filter!</button><br>
+       
+
+    </section>
+    
+    <section id="result">
+        <h2>What I found: <span class="answer"></span></h2>
+    </section>
+
+  </body>
+</html>
+
+
